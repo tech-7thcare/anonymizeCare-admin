@@ -1,14 +1,49 @@
 "use client";
 
-import { Download, UserPlus, Filter, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import {
+  Download,
+  UserPlus,
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const consultants = [
-  { id: "C-8921", name: "Dr. Aris Thorne", specialty: "Neurology", department: "Intensive Care", status: "Active", avatar: "A" },
-  { id: "C-7433", name: "Dr. Elena Rostova", specialty: "Cardiology", department: "Surgery", status: "Active", avatar: "E" },
-  { id: "C-5102", name: "Dr. Marcus Kane", specialty: "Orthopedics", department: "Outpatient", status: "Inactive", avatar: "M" },
-  { id: "C-9011", name: "Dr. Sarah Vance", specialty: "Pediatrics", department: "Emergency", status: "Active", avatar: "S" },
+  {
+    id: "C-8921",
+    name: "Dr. Aris Thorne",
+    specialty: "Neurology",
+    department: "Intensive Care",
+    status: "Active",
+    avatar: "A",
+  },
+  {
+    id: "C-7433",
+    name: "Dr. Elena Rostova",
+    specialty: "Cardiology",
+    department: "Surgery",
+    status: "Active",
+    avatar: "E",
+  },
+  {
+    id: "C-5102",
+    name: "Dr. Marcus Kane",
+    specialty: "Orthopedics",
+    department: "Outpatient",
+    status: "Inactive",
+    avatar: "M",
+  },
+  {
+    id: "C-9011",
+    name: "Dr. Sarah Vance",
+    specialty: "Pediatrics",
+    department: "Emergency",
+    status: "Active",
+    avatar: "S",
+  },
 ];
 
 export default function ConsultantsPage() {
@@ -17,11 +52,18 @@ export default function ConsultantsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Consultant Roster</h1>
-          <p className="text-zinc-400 mt-1">Manage clinical staff, specialties, and operational status.</p>
+          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">
+            Consultant Roster
+          </h1>
+          <p className="text-zinc-400 mt-1">
+            Manage clinical staff, specialties, and operational status.
+          </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="bg-[#131b20] border-[#1f2930] text-zinc-300 hover:bg-[#1f2930] hover:text-zinc-100">
+          <Button
+            variant="outline"
+            className="bg-[#131b20] border-[#1f2930] text-zinc-300 hover:bg-[#1f2930] hover:text-zinc-100"
+          >
             <Download className="h-4 w-4 mr-2" /> Export
           </Button>
           <Link href="/dashboard/consultants/new">
@@ -55,9 +97,7 @@ export default function ConsultantsPage() {
             <option>Inactive</option>
           </select>
         </div>
-        <div className="text-zinc-400 text-sm">
-          Showing 42 Results
-        </div>
+        <div className="text-zinc-400 text-sm">Showing 42 Results</div>
       </div>
 
       {/* Table */}
@@ -75,27 +115,42 @@ export default function ConsultantsPage() {
             </thead>
             <tbody className="divide-y divide-[#1f2930]">
               {consultants.map((consultant) => (
-                <tr key={consultant.id} className="hover:bg-[#1a242a] transition-colors">
+                <tr
+                  key={consultant.id}
+                  className="hover:bg-[#1a242a] transition-colors"
+                >
                   <td className="p-4 pl-6">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-full bg-zinc-800 flex items-center justify-center font-medium text-zinc-300 border border-[#1f2930]">
                         {consultant.avatar}
                       </div>
                       <div>
-                        <p className="font-medium text-zinc-200">{consultant.name}</p>
-                        <p className="text-xs text-zinc-500">ID: {consultant.id}</p>
+                        <p className="font-medium text-zinc-200">
+                          {consultant.name}
+                        </p>
+                        <p className="text-xs text-zinc-500">
+                          ID: {consultant.id}
+                        </p>
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 text-zinc-300 text-sm">{consultant.specialty}</td>
-                  <td className="p-4 text-zinc-300 text-sm">{consultant.department}</td>
+                  <td className="p-4 text-zinc-300 text-sm">
+                    {consultant.specialty}
+                  </td>
+                  <td className="p-4 text-zinc-300 text-sm">
+                    {consultant.department}
+                  </td>
                   <td className="p-4">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
-                      consultant.status === 'Active' 
-                        ? 'bg-emerald-500/10 text-[#98e9a8] border-emerald-500/20' 
-                        : 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
-                    }`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${consultant.status === 'Active' ? 'bg-[#98e9a8]' : 'bg-zinc-500'}`}></span>
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
+                        consultant.status === "Active"
+                          ? "bg-emerald-500/10 text-[#98e9a8] border-emerald-500/20"
+                          : "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${consultant.status === "Active" ? "bg-[#98e9a8]" : "bg-zinc-500"}`}
+                      ></span>
                       {consultant.status}
                     </span>
                   </td>
@@ -109,7 +164,7 @@ export default function ConsultantsPage() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Pagination Info */}
         <div className="p-4 border-t border-[#1f2930] flex items-center justify-between text-sm text-zinc-400">
           <div>Showing 1 to 4 of 42</div>
@@ -117,8 +172,12 @@ export default function ConsultantsPage() {
             <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#1f2930] text-zinc-500">
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1f2930] text-zinc-200">1</button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#1f2930] text-zinc-400">2</button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#1f2930] text-zinc-200">
+              1
+            </button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#1f2930] text-zinc-400">
+              2
+            </button>
             <span className="px-1 text-zinc-600">...</span>
             <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#1f2930] text-zinc-500">
               <ChevronRight className="h-4 w-4" />

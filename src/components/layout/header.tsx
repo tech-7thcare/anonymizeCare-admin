@@ -9,8 +9,8 @@ export function Header() {
       {/* Search */}
       <div className="flex-1 max-w-md relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-        <Input 
-          placeholder="Search consultants, departments..." 
+        <Input
+          placeholder="Search consultants, departments..."
           className="w-full bg-[#131b20] border-[#1f2930] text-zinc-200 placeholder:text-zinc-600 pl-10 rounded-xl focus-visible:ring-[#98e9a8]/50"
         />
       </div>
