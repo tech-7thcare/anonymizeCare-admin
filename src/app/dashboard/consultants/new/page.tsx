@@ -13,15 +13,15 @@ export default function NewConsultantPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="text-zinc-400 text-xs font-bold tracking-wider uppercase mb-1">
+          <p className="text-slate-500 text-xs font-bold tracking-wider uppercase mb-1">
             Onboarding Protocol
           </p>
-          <h1 className="text-3xl font-bold text-zinc-100 tracking-tight">
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
             New Consultant Setup
           </h1>
         </div>
         <div>
-          <Button className="bg-[#98e9a8] hover:bg-[#81d492] text-[#0a2717] font-semibold rounded-full px-6">
+          <Button className="bg-[#007CD7] hover:bg-[#0065B3] text-white font-semibold rounded-full px-6">
             Generate & Email Access Token
           </Button>
         </div>
@@ -31,58 +31,58 @@ export default function NewConsultantPage() {
         {/* Left Column (Forms) */}
         <div className="lg:col-span-2 space-y-6">
           {/* Identity Credentials */}
-          <div className="bg-[#131b20] border border-[#1f2930] rounded-xl p-6 space-y-6">
-            <div className="flex items-center gap-2 text-zinc-300 font-medium mb-2">
-              <Lock className="h-5 w-5 text-[#98e9a8]" />
+          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
+            <div className="flex items-center gap-2 text-slate-700 font-medium mb-2">
+              <Lock className="h-5 w-5 text-[#007CD7]" />
               Identity Credentials
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-zinc-400 text-sm">
+                <Label className="text-slate-500 text-sm">
                   Legal First Name
                 </Label>
                 <Input
                   placeholder="e.g. Sarah"
-                  className="bg-[#0b1014] border-[#1f2930] text-zinc-200 placeholder:text-zinc-700"
+                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-zinc-400 text-sm">Legal Last Name</Label>
+                <Label className="text-slate-500 text-sm">Legal Last Name</Label>
                 <Input
                   placeholder="e.g. Chen"
-                  className="bg-[#0b1014] border-[#1f2930] text-zinc-200 placeholder:text-zinc-700"
+                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-400 text-sm">
+              <Label className="text-slate-500 text-sm">
                 Institutional Email Address
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   placeholder="s.chen@hospital.org"
-                  className="bg-[#0b1014] border-[#1f2930] text-zinc-200 placeholder:text-zinc-700 pl-10"
+                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700 pl-10"
                 />
               </div>
             </div>
           </div>
 
           {/* System Placement */}
-          <div className="bg-[#131b20] border border-[#1f2930] rounded-xl p-6 space-y-6">
-            <div className="flex items-center gap-2 text-zinc-300 font-medium mb-2">
-              <Network className="h-5 w-5 text-[#98e9a8]" />
+          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
+            <div className="flex items-center gap-2 text-slate-700 font-medium mb-2">
+              <Network className="h-5 w-5 text-[#007CD7]" />
               System Placement
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-zinc-400 text-sm">
+                <Label className="text-slate-500 text-sm">
                   Primary Specialty
                 </Label>
-                <select className="w-full bg-[#0b1014] border border-[#1f2930] text-zinc-300 text-sm rounded-md px-3 py-2.5 outline-none focus:border-[#98e9a8]">
+                <select className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md px-3 py-2.5 outline-none focus:border-[#007CD7]">
                   <option value="" disabled selected>
                     Select Specialty...
                   </option>
@@ -91,10 +91,10 @@ export default function NewConsultantPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <Label className="text-zinc-400 text-sm">
+                <Label className="text-slate-500 text-sm">
                   Department Assignment
                 </Label>
-                <select className="w-full bg-[#0b1014] border border-[#1f2930] text-zinc-300 text-sm rounded-md px-3 py-2.5 outline-none focus:border-[#98e9a8]">
+                <select className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md px-3 py-2.5 outline-none focus:border-[#007CD7]">
                   <option value="" disabled selected>
                     Assign Department...
                   </option>
@@ -105,14 +105,14 @@ export default function NewConsultantPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-400 text-sm">
+              <Label className="text-slate-500 text-sm">
                 Supervising Physician (Optional)
               </Label>
               <div className="relative">
-                <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
+                <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   placeholder="Search system directory..."
-                  className="bg-[#0b1014] border-[#1f2930] text-zinc-200 placeholder:text-zinc-700 pl-10"
+                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700 pl-10"
                 />
               </div>
             </div>
@@ -121,9 +121,9 @@ export default function NewConsultantPage() {
 
         {/* Right Column (Access Configuration) */}
         <div>
-          <div className="bg-[#131b20] border border-[#1f2930] rounded-xl p-6 h-full">
-            <div className="flex items-center gap-2 text-zinc-300 font-medium mb-6">
-              <ShieldIcon className="h-5 w-5 text-[#98e9a8]" />
+          <div className="bg-white border border-slate-200 rounded-xl p-6 h-full">
+            <div className="flex items-center gap-2 text-slate-700 font-medium mb-6">
+              <ShieldIcon className="h-5 w-5 text-[#007CD7]" />
               Access Configuration
             </div>
 
@@ -131,51 +131,51 @@ export default function NewConsultantPage() {
               {/* Toggle 1 */}
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <Label className="text-zinc-200 text-base font-medium">
+                  <Label className="text-slate-800 text-base font-medium">
                     EHR Write Access
                   </Label>
-                  <p className="text-xs text-zinc-500 leading-relaxed">
+                  <p className="text-xs text-slate-400 leading-relaxed">
                     Permit consultant to modify Electronic Health Records
                     directly.
                   </p>
                 </div>
                 <Switch
                   defaultChecked
-                  className="data-[state=checked]:bg-[#98e9a8]"
+                  className="data-[state=checked]:bg-[#007CD7]"
                 />
               </div>
 
               {/* Toggle 2 */}
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <Label className="text-zinc-200 text-base font-medium">
+                  <Label className="text-slate-800 text-base font-medium">
                     Prescription Authority
                   </Label>
-                  <p className="text-xs text-zinc-500 leading-relaxed">
+                  <p className="text-xs text-slate-400 leading-relaxed">
                     Enable digital prescription signing module.
                   </p>
                 </div>
-                <Switch className="data-[state=checked]:bg-[#98e9a8]" />
+                <Switch className="data-[state=checked]:bg-[#007CD7]" />
               </div>
 
               {/* Toggle 3 */}
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <Label className="text-zinc-200 text-base font-medium">
+                  <Label className="text-slate-800 text-base font-medium">
                     Advanced Analytics View
                   </Label>
-                  <p className="text-xs text-zinc-500 leading-relaxed">
+                  <p className="text-xs text-slate-400 leading-relaxed">
                     Grant access to population health metrics and predictive
                     models.
                   </p>
                 </div>
-                <Switch className="data-[state=checked]:bg-[#98e9a8]" />
+                <Switch className="data-[state=checked]:bg-[#007CD7]" />
               </div>
             </div>
 
-            <div className="mt-10 p-4 bg-[#1a242a] border border-[#25323a] rounded-lg">
-              <p className="text-xs text-zinc-400 flex gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#98e9a8] flex-shrink-0 mt-1"></span>
+            <div className="mt-10 p-4 bg-[#1a242a] border border-slate-300 rounded-lg">
+              <p className="text-xs text-slate-500 flex gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#007CD7] flex-shrink-0 mt-1"></span>
                 <span>
                   Token valid for 48 hours. Requires 2FA completion by
                   consultant upon first login.

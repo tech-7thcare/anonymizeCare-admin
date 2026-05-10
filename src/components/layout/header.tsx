@@ -5,27 +5,27 @@ import { Input } from "@/components/ui/input";
 
 export function Header() {
   return (
-    <header className="h-20 bg-[#0d1317] border-b border-[#1f2930] flex items-center justify-between px-8">
+    <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm relative z-10">
       {/* Search */}
-      <div className="flex-1 max-w-md relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+      <div className="flex-1 max-w-xl relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
         <Input
           placeholder="Search consultants, departments..."
-          className="w-full bg-[#131b20] border-[#1f2930] text-zinc-200 placeholder:text-zinc-600 pl-10 rounded-xl focus-visible:ring-[#98e9a8]/50"
+          className="w-full bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 pl-11 h-11 rounded-xl focus-visible:ring-[#007CD7]/20 focus-visible:border-[#007CD7]/30 transition-all shadow-sm"
         />
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-6">
-        <button className="text-zinc-400 hover:text-zinc-200 relative">
+      <div className="flex items-center gap-5">
+        <button className="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-2.5 rounded-full transition-all relative">
           <Bell className="h-5 w-5" />
-          <span className="absolute top-0 right-0 w-2 h-2 bg-[#98e9a8] rounded-full"></span>
+          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
         </button>
-        <button className="text-zinc-400 hover:text-zinc-200">
+        <button className="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-2.5 rounded-full transition-all">
           <Settings className="h-5 w-5" />
         </button>
-        <div className="h-8 w-8 rounded-full bg-zinc-800 border border-[#1f2930] overflow-hidden flex items-center justify-center">
-          <User className="h-5 w-5 text-zinc-400" />
+        <div className="h-10 w-10 pl-1 ml-2 rounded-full border border-slate-200 shadow-sm overflow-hidden flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-[#007CD7]/20 transition-all bg-[#007CD7]/10">
+          <User className="h-5 w-5 text-[#007CD7]" />
         </div>
       </div>
     </header>
