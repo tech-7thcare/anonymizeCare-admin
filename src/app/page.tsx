@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Shield } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,25 +29,30 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0d1317] p-4 text-zinc-100">
-      <Card className="w-full max-w-md bg-[#131b20] border-[#1f2930] text-zinc-50">
+    <div className="min-h-screen flex items-center justify-center bg-white p-4 text-slate-900">
+      <Card className="w-full max-w-md bg-white border-slate-200 text-slate-900">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center mb-2">
-            <div className="bg-emerald-500/10 p-3 rounded-full">
-              <Shield className="h-8 w-8 text-[#98e9a8]" />
-            </div>
+            <Image
+              src="/logo.png"
+              alt="AnonymizeCare Logo"
+              width={96}
+              height={96}
+              className="object-contain"
+              priority
+            />
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">
             AnonymizeCare
           </CardTitle>
-          <CardDescription className="text-zinc-400">
+          <CardDescription className="text-slate-500">
             Admin Console Access
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-zinc-300">
+              <Label htmlFor="email" className="text-slate-700">
                 Admin Email
               </Label>
               <Input
@@ -55,12 +60,12 @@ export default function LoginPage() {
                 type="email"
                 placeholder="admin@anonymizecare.com"
                 required
-                className="bg-[#0b1014] border-[#25323a] text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-[#98e9a8]"
+                className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-[#007CD7]"
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-zinc-300">
+                <Label htmlFor="password" className="text-slate-700">
                   Password
                 </Label>
               </div>
@@ -69,12 +74,12 @@ export default function LoginPage() {
                 type="password"
                 required
                 placeholder="••••••••"
-                className="bg-[#0b1014] border-[#25323a] text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-[#98e9a8]"
+                className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-[#007CD7]"
               />
             </div>
             <Button
               type="submit"
-              className="w-full bg-[#98e9a8] hover:bg-[#81d492] hover:text-[#0a2717] text-[#0d1317] font-semibold tracking-wide transition-colors mt-4"
+              className="w-full bg-[#007CD7] hover:bg-[#0065B3]  text-white font-semibold tracking-wide transition-colors mt-4"
               disabled={isLoading}
             >
               {isLoading ? "Authenticating..." : "Sign In"}
