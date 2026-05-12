@@ -1,209 +1,344 @@
 "use client";
 
-import { Lock, Mail, Users, Network } from "lucide-react";
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Lock,
+  Mail,
+  Phone,
+  Network,
+  FileText,
+  Loader2,
+  CheckCircle2,
+  ArrowLeft,
+  Upload,
+} from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
+import { useMe } from "@/hooks/useMe";
+import {
+  createInstitutionConsultant,
+  type CreateConsultantPayload,
+} from "@/lib/services/consultants";
 
-export default function NewConsultantPage() {
+function getInstitutionId(me: ReturnType<typeof useMe>["data"]) {
+  if (!me) return undefined;
+  if (me.institutionId) return me.institutionId;
+  if (typeof me.institution === "string") return me.institution;
+  if (me.institution && typeof me.institution === "object")
+    return me.institution._id;
+  return undefined;
+}
+
+function FileInput({
+  label,
+  onChange,
+  file,
+}: {
+  label: string;
+  onChange: (f: File | null) => void;
+  file: File | null;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
   return (
-    <div className="space-y-6 max-w-6xl">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <p className="text-slate-500 text-xs font-bold tracking-wider uppercase mb-1">
-            Onboarding Protocol
-          </p>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-            New Consultant Setup
-          </h1>
-        </div>
-        <div>
-          <Button className="bg-[#007CD7] hover:bg-[#0065B3] text-white font-semibold rounded-full px-6">
-            Generate & Email Access Token
-          </Button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-        {/* Left Column (Forms) */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Identity Credentials */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-            <div className="flex items-center gap-2 text-slate-700 font-medium mb-2">
-              <Lock className="h-5 w-5 text-[#007CD7]" />
-              Identity Credentials
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-slate-500 text-sm">
-                  Legal First Name
-                </Label>
-                <Input
-                  placeholder="e.g. Sarah"
-                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-slate-500 text-sm">Legal Last Name</Label>
-                <Input
-                  placeholder="e.g. Chen"
-                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-slate-500 text-sm">
-                Institutional Email Address
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input
-                  placeholder="s.chen@hospital.org"
-                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700 pl-10"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* System Placement */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-            <div className="flex items-center gap-2 text-slate-700 font-medium mb-2">
-              <Network className="h-5 w-5 text-[#007CD7]" />
-              System Placement
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-slate-500 text-sm">
-                  Primary Specialty
-                </Label>
-                <select className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md px-3 py-2.5 outline-none focus:border-[#007CD7]">
-                  <option value="" disabled selected>
-                    Select Specialty...
-                  </option>
-                  <option>Neurology</option>
-                  <option>Cardiology</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-slate-500 text-sm">
-                  Department Assignment
-                </Label>
-                <select className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-md px-3 py-2.5 outline-none focus:border-[#007CD7]">
-                  <option value="" disabled selected>
-                    Assign Department...
-                  </option>
-                  <option>Intensive Care</option>
-                  <option>Surgery</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-slate-500 text-sm">
-                Supervising Physician (Optional)
-              </Label>
-              <div className="relative">
-                <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input
-                  placeholder="Search system directory..."
-                  className="bg-slate-50 border-slate-200 text-slate-800 placeholder:text-zinc-700 pl-10"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column (Access Configuration) */}
-        <div>
-          <div className="bg-white border border-slate-200 rounded-xl p-6 h-full">
-            <div className="flex items-center gap-2 text-slate-700 font-medium mb-6">
-              <ShieldIcon className="h-5 w-5 text-[#007CD7]" />
-              Access Configuration
-            </div>
-
-            <div className="space-y-8">
-              {/* Toggle 1 */}
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <Label className="text-slate-800 text-base font-medium">
-                    EHR Write Access
-                  </Label>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Permit consultant to modify Electronic Health Records
-                    directly.
-                  </p>
-                </div>
-                <Switch
-                  defaultChecked
-                  className="data-[state=checked]:bg-[#007CD7]"
-                />
-              </div>
-
-              {/* Toggle 2 */}
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <Label className="text-slate-800 text-base font-medium">
-                    Prescription Authority
-                  </Label>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Enable digital prescription signing module.
-                  </p>
-                </div>
-                <Switch className="data-[state=checked]:bg-[#007CD7]" />
-              </div>
-
-              {/* Toggle 3 */}
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1">
-                  <Label className="text-slate-800 text-base font-medium">
-                    Advanced Analytics View
-                  </Label>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Grant access to population health metrics and predictive
-                    models.
-                  </p>
-                </div>
-                <Switch className="data-[state=checked]:bg-[#007CD7]" />
-              </div>
-            </div>
-
-            <div className="mt-10 p-4 bg-[#1a242a] border border-slate-300 rounded-lg">
-              <p className="text-xs text-slate-500 flex gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#007CD7] flex-shrink-0 mt-1"></span>
-                <span>
-                  Token valid for 48 hours. Requires 2FA completion by
-                  consultant upon first login.
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-2">
+      <Label className="text-slate-500 text-sm">{label}</Label>
+      <button
+        type="button"
+        onClick={() => ref.current?.click()}
+        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 hover:border-[#007CD7] hover:bg-blue-50/30 transition-colors text-left"
+      >
+        <Upload className="h-4 w-4 text-slate-400 shrink-0" />
+        <span className="truncate">
+          {file ? file.name : "Click to upload file…"}
+        </span>
+      </button>
+      <input
+        ref={ref}
+        type="file"
+        className="hidden"
+        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+      />
     </div>
   );
 }
 
-function ShieldIcon(props: any) {
+export default function NewConsultantPage() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { data: me } = useMe();
+  const institutionId = getInstitutionId(me) ?? "";
+
+  const [fields, setFields] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    categoryId: "",
+    specialtyId: "",
+    medicalLicenseNumber: "",
+  });
+  const [files, setFiles] = useState<{
+    cvFile: File | null;
+    medicalLicenseFile: File | null;
+    signature: File | null;
+    institutionIdFile: File | null;
+  }>({
+    cvFile: null,
+    medicalLicenseFile: null,
+    signature: null,
+    institutionIdFile: null,
+  });
+
+  const [success, setSuccess] = useState(false);
+
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: (payload: CreateConsultantPayload) =>
+      createInstitutionConsultant(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["consultants"] });
+      setSuccess(true);
+      setTimeout(() => router.push("/dashboard/consultants"), 1800);
+    },
+  });
+
+  const set =
+    (key: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement>) =>
+      setFields((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate({ ...fields, institutionId, ...files });
+  };
+
+  const errorMessage =
+    (error as { response?: { data?: { message?: string } } } | null)?.response
+      ?.data?.message ??
+    (error ? "Something went wrong. Please try again." : null);
+
+  if (success) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-center">
+        <div className="h-16 w-16 rounded-full bg-emerald-50 flex items-center justify-center">
+          <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+        </div>
+        <h2 className="text-xl font-bold text-slate-900">Consultant Created</h2>
+        <p className="text-slate-500 text-sm">Redirecting to roster…</p>
+      </div>
+    );
+  }
+
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2-1 4-2 7-2 2.89 0 4.96.9 6.8 1.83A1 1 0 0 1 20 6z" />
-    </svg>
+    <div className="space-y-6 max-w-3xl">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <Link
+            href="/dashboard/consultants"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-700 mb-2 transition-colors"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> Back to Roster
+          </Link>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+            New Consultant Setup
+          </h1>
+        </div>
+      </div>
+
+      {errorMessage && (
+        <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-lg px-4 py-3">
+          {errorMessage}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Identity Credentials */}
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
+          <div className="flex items-center gap-2 text-slate-700 font-semibold">
+            <Lock className="h-5 w-5 text-[#007CD7]" />
+            Identity Credentials
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-2">
+              <Label className="text-slate-500 text-sm">First Name</Label>
+              <Input
+                placeholder="e.g. Sarah"
+                required
+                value={fields.firstName}
+                onChange={set("firstName")}
+                className="bg-slate-50 border-slate-200 text-slate-800"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-slate-500 text-sm">Last Name</Label>
+              <Input
+                placeholder="e.g. Chen"
+                required
+                value={fields.lastName}
+                onChange={set("lastName")}
+                className="bg-slate-50 border-slate-200 text-slate-800"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-slate-500 text-sm">
+              Institutional Email Address
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Input
+                type="email"
+                placeholder="s.chen@hospital.org"
+                required
+                value={fields.email}
+                onChange={set("email")}
+                className="bg-slate-50 border-slate-200 text-slate-800 pl-10"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-2">
+              <Label className="text-slate-500 text-sm">Phone Number</Label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input
+                  type="tel"
+                  placeholder="+2348012345678"
+                  required
+                  value={fields.phoneNumber}
+                  onChange={set("phoneNumber")}
+                  className="bg-slate-50 border-slate-200 text-slate-800 pl-10"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-slate-500 text-sm">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input
+                  type="password"
+                  placeholder="StrongPass@123"
+                  required
+                  value={fields.password}
+                  onChange={set("password")}
+                  className="bg-slate-50 border-slate-200 text-slate-800 pl-10"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Professional Details */}
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
+          <div className="flex items-center gap-2 text-slate-700 font-semibold">
+            <Network className="h-5 w-5 text-[#007CD7]" />
+            Professional Details
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-2">
+              <Label className="text-slate-500 text-sm">Category ID</Label>
+              <Input
+                placeholder="68f648cf071e18cf1210d216"
+                required
+                value={fields.categoryId}
+                onChange={set("categoryId")}
+                className="bg-slate-50 border-slate-200 text-slate-800 font-mono text-xs"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-slate-500 text-sm">Specialty ID</Label>
+              <Input
+                placeholder="68f64d1c63bb4100c4347710"
+                required
+                value={fields.specialtyId}
+                onChange={set("specialtyId")}
+                className="bg-slate-50 border-slate-200 text-slate-800 font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-slate-500 text-sm">
+              Medical License Number
+            </Label>
+            <Input
+              placeholder="e.g. 8h7g5d"
+              required
+              value={fields.medicalLicenseNumber}
+              onChange={set("medicalLicenseNumber")}
+              className="bg-slate-50 border-slate-200 text-slate-800"
+            />
+          </div>
+        </div>
+
+        {/* Document Uploads */}
+        <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
+          <div className="flex items-center gap-2 text-slate-700 font-semibold">
+            <FileText className="h-5 w-5 text-[#007CD7]" />
+            Documents
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <FileInput
+              label="CV / Resume"
+              file={files.cvFile}
+              onChange={(f) => setFiles((p) => ({ ...p, cvFile: f }))}
+            />
+            <FileInput
+              label="Medical License File"
+              file={files.medicalLicenseFile}
+              onChange={(f) =>
+                setFiles((p) => ({ ...p, medicalLicenseFile: f }))
+              }
+            />
+            <FileInput
+              label="Signature"
+              file={files.signature}
+              onChange={(f) => setFiles((p) => ({ ...p, signature: f }))}
+            />
+            <FileInput
+              label="Institution ID File"
+              file={files.institutionIdFile}
+              onChange={(f) =>
+                setFiles((p) => ({ ...p, institutionIdFile: f }))
+              }
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-3 pb-8">
+          <Link href="/dashboard/consultants">
+            <Button
+              type="button"
+              variant="outline"
+              className="bg-white border-slate-200 text-slate-700"
+            >
+              Cancel
+            </Button>
+          </Link>
+          <Button
+            type="submit"
+            disabled={isPending || !institutionId}
+            className="bg-[#007CD7] hover:bg-[#0065B3] text-white font-semibold min-w-36"
+          >
+            {isPending ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" /> Creating…
+              </span>
+            ) : (
+              "Create Consultant"
+            )}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
