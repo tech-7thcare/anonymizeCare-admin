@@ -10,11 +10,23 @@ export interface SignInResponse {
 }
 
 export interface MeResponse {
-  id: string;
+  _id: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  name?: string;
-  role?: string;
-  [key: string]: unknown;
+  phoneNumber?: string;
+  userType?: string;
+  isUserAnonymous?: boolean;
+  isStudent?: boolean;
+  walletBalance?: number;
+  isEmailVerified?: boolean;
+  isDeleted?: boolean;
+  timezone?: string;
+  acceptedTerms?: boolean;
+  institutionId?: string;
+  institution?: string | { _id: string; name?: string };
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export async function signIn(payload: SignInPayload): Promise<SignInResponse> {
@@ -23,6 +35,6 @@ export async function signIn(payload: SignInPayload): Promise<SignInResponse> {
 }
 
 export async function getMe(): Promise<MeResponse> {
-  const { data } = await api.get<MeResponse>("me");
-  return data;
+  const { data } = await api.get<{ user: MeResponse }>("me");
+  return data.user;
 }

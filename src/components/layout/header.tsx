@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { Search, Bell, Settings, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useMe } from "@/hooks/useMe";
 
 export function Header() {
   const { data: me } = useMe();
+  const fullName = me ? `${me.firstName} ${me.lastName}` : "";
 
   return (
     <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm relative z-10">
@@ -27,15 +29,22 @@ export function Header() {
         <button className="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-2.5 rounded-full transition-all">
           <Settings className="h-5 w-5" />
         </button>
-        <div className="flex items-center gap-3 ml-2 cursor-pointer group">
+        <Link
+          href="/dashboard/profile"
+          className="flex items-center gap-3 ml-2 cursor-pointer group"
+        >
           <div className="text-right hidden sm:block">
-            {me?.name && <p className="text-sm font-semibold text-slate-800 leading-tight">{me.name}</p>}
+            {fullName && (
+              <p className="text-sm font-semibold text-slate-800 leading-tight">
+                {fullName}
+              </p>
+            )}
             {me?.email && <p className="text-xs text-slate-500">{me.email}</p>}
           </div>
           <div className="h-10 w-10 rounded-full border border-slate-200 shadow-sm overflow-hidden flex items-center justify-center group-hover:ring-2 group-hover:ring-[#007CD7]/20 transition-all bg-[#007CD7]/10">
             <User className="h-5 w-5 text-[#007CD7]" />
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );

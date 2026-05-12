@@ -35,8 +35,8 @@ export default function LoginPage() {
       router.push("/dashboard");
     } catch (err: unknown) {
       const message =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "Invalid credentials. Please try again.";
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "Invalid credentials. Please try again.";
       setError(message);
     } finally {
       setIsLoading(false);
