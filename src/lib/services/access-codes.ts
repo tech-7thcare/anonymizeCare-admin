@@ -10,6 +10,12 @@ export interface AccessCode {
   expiresAt: string;
   createdAt: string;
   updatedAt: string;
+  usedAt?: string;
+  usedBy?: {
+    _id: string;
+    nickname?: string;
+    email?: string;
+  };
 }
 
 export interface CreateAccessCodesPayload {

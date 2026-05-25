@@ -15,18 +15,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { signIn } from "@/lib/services/auth";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
     setIsLoading(true);
 
     try {
@@ -37,7 +36,7 @@ export default function LoginPage() {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data
           ?.message ?? "Invalid credentials. Please try again.";
-      setError(message);
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -66,11 +65,6 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-5">
-            {error && (
-              <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-lg px-4 py-3">
-                {error}
-              </div>
-            )}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-slate-700">
                 Admin Email
