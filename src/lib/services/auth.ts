@@ -9,6 +9,23 @@ export interface SignInResponse {
   token: string;
 }
 
+export interface InstitutionDetail {
+  _id: string;
+  name: string;
+  type?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  phoneNumber?: string;
+  email?: string;
+  isVerified?: boolean;
+  isActive?: boolean;
+  freeConsultationsPerMonth?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface MeResponse {
   _id: string;
   firstName: string;
@@ -24,9 +41,20 @@ export interface MeResponse {
   timezone?: string;
   acceptedTerms?: boolean;
   institutionId?: string;
-  institution?: string | { _id: string; name?: string };
+  institutionRole?: string;
+  institution?: string | InstitutionDetail;
   createdAt?: string;
   updatedAt?: string;
+}
+
+interface MeApiResponse {
+  user: MeResponse;
+  institutionStaff?: {
+    _id: string;
+    institution?: InstitutionDetail;
+    role?: string;
+    isActive?: boolean;
+  };
 }
 
 export async function signIn(payload: SignInPayload): Promise<SignInResponse> {
@@ -35,6 +63,11 @@ export async function signIn(payload: SignInPayload): Promise<SignInResponse> {
 }
 
 export async function getMe(): Promise<MeResponse> {
-  const { data } = await api.get<{ user: MeResponse }>("me");
-  return data.user;
+  const { data } = await api.get<MeApiResponse>("me");
+  const user = data.user;
+  if (data.institutionStaff?.institution) {
+    user.institution = data.institutionStaff.institution;
+    user.institutionRole = data.institutionStaff.role;
+  }
+  return user;
 }

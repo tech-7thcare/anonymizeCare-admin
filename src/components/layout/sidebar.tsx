@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   Users,
   Key,
-  Wallet,
   LifeBuoy,
   LogOut,
   Plus,
@@ -18,11 +18,18 @@ const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Consultants", href: "/dashboard/consultants", icon: Users },
   { name: "Access Codes", href: "/dashboard/access-codes", icon: Key },
-  { name: "Finance", href: "/dashboard/finance", icon: Wallet },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    queryClient.clear();
+    router.push("/");
+  };
 
   return (
     <div className="w-64 bg-white border-r border-slate-200 h-screen flex flex-col text-slate-600 shadow-sm">
@@ -83,12 +90,12 @@ export function Sidebar() {
           >
             <LifeBuoy className="h-4 w-4 text-slate-400" /> Support
           </Link>
-          <Link
-            href="/"
-            className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors font-medium text-slate-600"
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors font-medium text-slate-600"
           >
             <LogOut className="h-4 w-4 text-slate-400" /> Logout
-          </Link>
+          </button>
         </div>
       </div>
     </div>

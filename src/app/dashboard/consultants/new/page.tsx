@@ -19,6 +19,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useMe } from "@/hooks/useMe";
+import { toast } from "sonner";
+import {
+  useConsultantCategories,
+  useConsultantSpecialties,
+} from "@/hooks/useConsultants";
 import {
   createInstitutionConsultant,
   type CreateConsultantPayload,
@@ -96,7 +101,7 @@ export default function NewConsultantPage() {
 
   const [success, setSuccess] = useState(false);
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (payload: CreateConsultantPayload) =>
       createInstitutionConsultant(payload),
     onSuccess: () => {
@@ -104,21 +109,41 @@ export default function NewConsultantPage() {
       setSuccess(true);
       setTimeout(() => router.push("/dashboard/consultants"), 1800);
     },
+    onError: (err: unknown) => {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "Something went wrong. Please try again.";
+      toast.error(message);
+    },
   });
+
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useConsultantCategories();
+  const { data: specialtiesData, isLoading: specialtiesLoading } =
+    useConsultantSpecialties(fields.categoryId || undefined);
+  const categories = categoriesData?.data ?? [];
+  const specialties = specialtiesData?.data ?? [];
 
   const set =
     (key: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement>) =>
       setFields((prev) => ({ ...prev, [key]: e.target.value }));
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFields((prev) => ({
+      ...prev,
+      categoryId: e.target.value,
+      specialtyId: "",
+    }));
+  };
+
+  const handleSpecialtyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFields((prev) => ({ ...prev, specialtyId: e.target.value }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     mutate({ ...fields, institutionId, ...files });
   };
-
-  const errorMessage =
-    (error as { response?: { data?: { message?: string } } } | null)?.response
-      ?.data?.message ??
-    (error ? "Something went wrong. Please try again." : null);
 
   if (success) {
     return (
@@ -148,12 +173,6 @@ export default function NewConsultantPage() {
           </h1>
         </div>
       </div>
-
-      {errorMessage && (
-        <div className="bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-lg px-4 py-3">
-          {errorMessage}
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Identity Credentials */}
@@ -244,24 +263,46 @@ export default function NewConsultantPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <Label className="text-slate-500 text-sm">Category ID</Label>
-              <Input
-                placeholder="68f648cf071e18cf1210d216"
+              <Label className="text-slate-500 text-sm">Category</Label>
+              <select
                 required
                 value={fields.categoryId}
-                onChange={set("categoryId")}
-                className="bg-slate-50 border-slate-200 text-slate-800 font-mono text-xs"
-              />
+                onChange={handleCategoryChange}
+                disabled={categoriesLoading}
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#007CD7]/30 focus:border-[#007CD7] disabled:opacity-50"
+              >
+                <option value="">
+                  {categoriesLoading ? "Loading…" : "Select a category"}
+                </option>
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-500 text-sm">Specialty ID</Label>
-              <Input
-                placeholder="68f64d1c63bb4100c4347710"
+              <Label className="text-slate-500 text-sm">Specialty</Label>
+              <select
                 required
                 value={fields.specialtyId}
-                onChange={set("specialtyId")}
-                className="bg-slate-50 border-slate-200 text-slate-800 font-mono text-xs"
-              />
+                onChange={handleSpecialtyChange}
+                disabled={!fields.categoryId || specialtiesLoading}
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#007CD7]/30 focus:border-[#007CD7] disabled:opacity-50"
+              >
+                <option value="">
+                  {!fields.categoryId
+                    ? "Select a category first"
+                    : specialtiesLoading
+                      ? "Loading…"
+                      : "Select a specialty"}
+                </option>
+                {specialties.map((sp) => (
+                  <option key={sp._id} value={sp._id}>
+                    {sp.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

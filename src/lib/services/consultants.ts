@@ -26,12 +26,42 @@ export interface ConsultantSpecialty {
   category?: string;
 }
 
+export interface ConsultantCategoryWithSpecialties {
+  _id: string;
+  value: string;
+  label: string;
+  createdAt?: string;
+  updatedAt?: string;
+  specialties: { _id: string; label: string; value: string }[];
+}
+
+export interface ConsultantCategoriesResponse {
+  success: boolean;
+  count: number;
+  data: ConsultantCategoryWithSpecialties[];
+}
+
+export interface ConsultantSpecialtyDetail {
+  _id: string;
+  value: string;
+  label: string;
+  category?: { _id: string; value: string; label: string };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ConsultantSpecialtiesResponse {
+  success: boolean;
+  count: number;
+  data: ConsultantSpecialtyDetail[];
+}
+
 export interface Consultant {
   _id: string;
   id?: string;
   user: ConsultantUser;
-  category: ConsultantCategory;
-  specialty: ConsultantSpecialty;
+  category: ConsultantCategory | string;
+  specialty: ConsultantSpecialty | string;
   medicalLicenseNumber: string;
   medicalLicenseFile?: string;
   cvFile?: string;
@@ -92,6 +122,27 @@ export interface CreateConsultantResponse {
 }
 
 // --- API Functions ---
+
+export async function fetchConsultantCategories(): Promise<ConsultantCategoriesResponse> {
+  const { data } = await api.get<ConsultantCategoriesResponse>("consultant-category");
+  return data;
+}
+
+export async function fetchConsultantSpecialties(
+  categoryId: string,
+): Promise<ConsultantSpecialtiesResponse> {
+  const { data } = await api.get<ConsultantSpecialtiesResponse>(
+    `consultant-specialty/${categoryId}`,
+  );
+  return data;
+}
+
+export async function fetchAllConsultants(): Promise<ConsultantsListResponse> {
+  const { data } = await api.get<ConsultantsListResponse>(
+    "consultant/all-consultants",
+  );
+  return data;
+}
 
 export async function fetchInstitutionConsultants(
   institutionId: string,

@@ -11,16 +11,32 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  useAllConsultants,
+  useInstitutionConsultants,
+} from "@/hooks/useConsultants";
 import { useMe } from "@/hooks/useMe";
-import { useInstitutionConsultants } from "@/hooks/useConsultants";
+import type {
+  ConsultantCategory,
+  ConsultantSpecialty,
+} from "@/lib/services/consultants";
 
-function getInstitutionId(me: ReturnType<typeof useMe>["data"]) {
+function getLabel(
+  field: ConsultantCategory | ConsultantSpecialty | string | undefined,
+): string {
+  if (!field) return "—";
+  if (typeof field === "string") return field;
+  return field.label ?? "—";
+}
+
+function getInstitutionId(
+  me: ReturnType<typeof useMe>["data"],
+): string | undefined {
   if (!me) return undefined;
-  if (me.institutionId) return me.institutionId;
-  if (typeof me.institution === "string") return me.institution;
   if (me.institution && typeof me.institution === "object")
     return me.institution._id;
-  return undefined;
+  if (typeof me.institution === "string") return me.institution;
+  return me.institutionId;
 }
 
 export default function ConsultantsPage() {
@@ -76,7 +92,7 @@ export default function ConsultantsPage() {
           </div>
         ) : consultants.length === 0 ? (
           <div className="flex items-center justify-center py-24 text-slate-400 text-sm">
-            No consultants found for this institution.
+            No consultants found.
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -118,10 +134,10 @@ export default function ConsultantsPage() {
                         </div>
                       </td>
                       <td className="p-4 text-slate-700 text-sm">
-                        {consultant.specialty?.label ?? "—"}
+                        {getLabel(consultant.specialty)}
                       </td>
                       <td className="p-4 text-slate-700 text-sm">
-                        {consultant.category?.label ?? "—"}
+                        {getLabel(consultant.category)}
                       </td>
                       <td className="p-4">
                         <span
